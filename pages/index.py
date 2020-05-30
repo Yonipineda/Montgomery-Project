@@ -19,10 +19,11 @@ column1 = dbc.Col(
             #### Montgomery County Crime Prediction
 
             Born out of a curiosity to know how my intuition matched with the data in regards to crime levels in my childhood city and state.
-            Montgomery Crime Predictor is trained on a RandomForest Model with ~200,000 observations. Using featuers such as
-            Time, location, and place, this model attempts to predict the tipe of crime that will occur. This was a project
-            made for learning and as a Unit Assesment for Unit 2 at [lambda School](https://lambdaschool.com/). Try it out
-            by clicking on the button below!
+            Montgomery Crime Predictor is trained on a RandomForest Model with ~200,000 observations. Using features such as
+            Time, location, and Place, this model attempts to predict the type of crime that will occur. This was a project
+            made for learning and as a Unit Assesment for Unit 2 at [lambda School](https://lambdaschool.com/). \n
+
+            Try it out by clicking on the button below!
 
             """
         ),
