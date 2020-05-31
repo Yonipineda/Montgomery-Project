@@ -34,7 +34,7 @@ This project was our Unit2 Final Project at [Lambda](https://lambdaschool.com/).
 
 ## Model
 
-The joblib file can be found here [finalized_model](notebooks/finalized_model.joblib)
+- The joblib file can be found here [finalized_model.joblib](notebooks/finalized_model.joblib)
 
 ---
 
