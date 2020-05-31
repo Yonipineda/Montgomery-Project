@@ -20,12 +20,15 @@ The cleaned data can be found in the notebooks folder, named [Cleaned_Crime.csv]
 
 All of the data exploration can be found there.
 
-For the cleaning process, refer to [Montgomery_Cleaning.ipynb](notebooks/Montgomery_Cleaning.ipynb)
+- For the cleaning process, refer to [Montgomery_Cleaning.ipynb](notebooks/Montgomery_Cleaning.ipynb)
 
-For the Model Process, refer to [Montgomery_Model.ipynb](notebooks/Montgomery_Model.ipynb)
+- For the visual creation process, refer to [Montgomery_Visualization.ipynb](notebooks/Montgomery_Visualization.ipynb)
 
-The basis for this project has to do with wanting to find out how my intuition matched with the data for the occurance of crime.
-It was our Unit2 Final Project at [Lambda](https://lambdaschool.com/).
+- For the Model Process, refer to [Montgomery_Model.ipynb](notebooks/Montgomery_Model.ipynb)
+
+The basis for this project has to do with wanting to find out how my intuition matched with the data on crime occurance in Montgomery County, MD; being where I lived for the majority of my childhood.
+
+This project was our Unit2 Final Project at [Lambda](https://lambdaschool.com/).
 
 ---
 
