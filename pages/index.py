@@ -5,6 +5,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 import plotly.express as px
+import pandas as pd
 
 # Imports from this application
 from app import app
@@ -19,9 +20,9 @@ column1 = dbc.Col(
             #### Montgomery County Crime Prediction
 
             Born out of a curiosity to know how my intuition matched with the data in regards to crime levels in my childhood city and state.
-            Montgomery Crime Predictor is trained on a RandomForest Model with ~200,000 observations. Using features such as
-            Time, location, and Place, this model attempts to predict the type of crime that will occur. This was a project
-            made for learning and as a Unit Assesment for Unit 2 at [lambda School](https://lambdaschool.com/). \n
+            Montgomery Crime Predictor is trained on a RandomForest Model with ~40k observations. Using features such as
+            Crime Type, location, and Place, this model attempts to predict the Street Location where crime will occur.
+            This was a project made for learning and as a Unit Assesment for Unit 2 at [lambda School](https://lambdaschool.com/). \n
 
             Try it out by clicking on the button below!
 
@@ -33,9 +34,16 @@ column1 = dbc.Col(
     md=4,
 )
 
-gapminder = px.data.gapminder()
-fig = px.scatter(gapminder.query("year==2007"), x="gdpPercap", y="lifeExp", size="pop", color="continent",
-                 hover_name="country", log_x=True, size_max=60)
+
+# Logic for plotting a graph in the home page
+df = pd.read_csv('notebooks/Cleaned_Crime.csv')
+available_indicators = df['Street Name'].unique()
+
+# Terrain Plot... pretty cool
+fig = px.scatter_mapbox(df, lat='Latitude', lon='Longitude',
+                        color='Street Name', opacity=0.1)
+fig.update_layout(mapbox_style='stamen-terrain')
+fig.show()
 
 column2 = dbc.Col(
     [
