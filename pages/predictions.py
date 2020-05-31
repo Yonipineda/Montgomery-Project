@@ -17,6 +17,11 @@ from app import app
 
 # read in the data
 df = pd.read_csv('notebooks/Cleaned_Crime.csv')
+print(f"CSV LOADED: {df}")
+
+# load in the RandomForest classifier model
+pipeline = load('notebooks/big_finalized_model.joblib')
+print(f"MODEL LOADED: {pipeline}")
 
 # Features/options
 available_place = sorted(df['Place'].unique())
@@ -44,54 +49,54 @@ column1 = dbc.Col([
     ),
 
     html.Div([
-        dcc.Markdown("###### Place"),
+        dcc.Markdown("##### Place"),
         dcc.Dropdown(
-            id='place-dd',
+            id='place_dd',
             options=[
                 {'label': i, 'value': i} for i in available_place],
             value='Street - In vehicle'
         )
     ]),
     html.Div([
-        dcc.Markdown("###### City"),
+        dcc.Markdown("##### City"),
         dcc.Dropdown(
-            id='city-dd',
+            id='city_dd',
             options=[
                 {'label': i, 'value': i} for i in available_city],
             value='SILVER SPRING'
         )
     ]),
     html.Div([
-        dcc.Markdown("###### Sector"),
+        dcc.Markdown("##### Sector"),
         dcc.Dropdown(
-            id='sector-dd',
+            id='sector_dd',
             options=[
                 {'label': i, 'value': i} for i in available_sector],
             value='L'
         )
     ]),
     html.Div([
-        dcc.Markdown("###### Police District"),
+        dcc.Markdown("##### Police District"),
         dcc.Dropdown(
-            id='police-dd',
+            id='police_dd',
             options=[
                 {'label': i, 'value': i} for i in available_police],
             value='WHEATON'
         )
     ]),
     html.Div([
-        dcc.Markdown("###### Zip Code "),
+        dcc.Markdown("##### Zip Code "),
         dcc.Dropdown(
-            id='zip-dd',
+            id='zip_dd',
             options=[
                 {'label': i, 'value': i} for i in available_zip],
-            value='20902.0'
+            value='20902'
         )
     ]),
     html.Div([
-        dcc.Markdown("###### Year"),
+        dcc.Markdown("##### Year"),
         dcc.Dropdown(
-            id='year-dd',
+            id='year_dd',
             options=[
                 {'label': i, 'value': i} for i in available_year],
             value='2020'
@@ -100,7 +105,7 @@ column1 = dbc.Col([
     html.Div([
         dcc.Markdown("##### Month"),
         dcc.Dropdown(
-            id='month-dd',
+            id='month_dd',
             options=[
                 {'label': i, 'value': i} for i in available_month],
             value='2'
@@ -109,7 +114,7 @@ column1 = dbc.Col([
     html.Div([
         dcc.Markdown("##### Hour"),
         dcc.Dropdown(
-            id='hour-dd',
+            id='hour_dd',
             options=[{'label': i, 'value': i} for i in available_hour],
             value='5'
         )
@@ -117,7 +122,7 @@ column1 = dbc.Col([
     html.Div([
         dcc.Markdown("##### Minute"),
         dcc.Dropdown(
-            id='minute-dd',
+            id='minute_dd',
             options=[{'label': i, 'value': i} for i in available_min],
             value='20'
         )
@@ -128,20 +133,12 @@ column1 = dbc.Col([
 
 )
 
-column3 = dbc.Col([
-    dcc.Markdown("#####  Select A Year"),
-    dcc.Slider(
-        id='year-slide',
-        min=2019,
-        max=2020,
-        step=2,
-        value=2020,
-        marks={n: f'{n:.0f}' for n in range(2019, 2020, 2)}
-    ),
-    html.H4(id='prediction-content', style={'fontWeight': 'bold'}),
-    html.Div(
-        dcc.Graph(id='shap-plot')
-    )
+column2 = dbc.Col([
+    dcc.Markdown('### Predicted Stree where crime will occur',
+                 className='mb-4'),
+    dcc.Markdown('#### Based on Time, Place, and Location', className='mb-4'),
+    dcc.Markdown('#### Trained on ~40k observations', className='mb-4'),
+    html.Div(id='prediction-content', className='lead')
 
 ],
     md=6
@@ -149,71 +146,39 @@ column3 = dbc.Col([
 
 
 @app.callback(
-    [Output('prediction-content', 'children'),
-     Output('shap-plot', 'figure')],
-    [Input('place-dd', 'value'),
-     Input('city-dd', 'value'),
-     Input('sector-dd', 'value'),
-     Input('police-dd', 'value'),
-     Input('zip-dd', 'value'),
-     Input('year-dd', 'value'),
-     Input('month-dd', 'value'),
-     Input('hour-dd', 'value'),
-     Input('minute-dd', 'value')])
-def predict_and_plot(
-        place, city, sector, policedistrictname, zipcode,
-        year, month, hour, minute):
-    # Create prediction
+    [Output('prediction-content', 'children')],
+    [Input('place_dd', 'value'),
+     Input('city_dd', 'value'),
+     Input('sector_dd', 'value'),
+     Input('police_dd', 'value'),
+     Input('zip_dd', 'value'),
+     Input('year_dd', 'value'),
+     Input('month_dd', 'value'),
+     Input('hour_dd', 'value'),
+     Input('minute_dd', 'value')])
+def predict_and_plot(place_dd, city_dd, sector_dd, police_dd, zip_dd, year_dd,
+                     month_dd, hour_dd, minute_dd):
+
     pred_df = pd.DataFrame(
-        columns=['Place', 'City', 'Sector', 'Police District Name', 'Zip Code',
-                 'Year', 'Month', 'Hour', 'Minute'],
-        data=[[place, city, sector, policedistrictname, zipcode,
-               year, month, hour, minute]]
+        columns=['place_dd', 'city_dd', 'sector_dd', 'police_dd',
+                 'zip_dd', 'year_dd', 'month_dd', 'hour_dd', 'minute_dd'],
+        data=[[place_dd, city_dd, sector_dd, police_dd, zip_dd,
+               year_dd, month_dd, hour_dd, minute_dd]]
     )
 
-    pipe = load('notebooks/finalized_model.joblib')
-    y_pred_log = pipe.predict(pred_df)
-    y_pred = np.expm1(y_pred_log)[0]
+    print(f"DF FOR PREDICTION SET: {pred_df}")
 
-    pred_out = f"Current Value: ${y_pred:,.2f}"
+    y_pred = pipeline.predict(pred_df)[0]
 
-    # Derive shap values from user input
-    encoder = pipe.named_steps['ordinalencoder']
-    model = pipe.named_steps['randomforestclassifier']
-    pred_df_encoded = encoder.transform(pred_df)
-    explainer = load('notebooks/explainer.joblib')
-    shap_vals = explainer.shap_values(pred_df_encoded)
-    input_names = [i for i in pred_df.iloc[0]]
+    pred_out = f'Name of the Street: {y_pred}'
 
-    # Create dataframe for shap plot
-    shap_df = pd.DataFrame({'feature': pred_df.columns.to_list(),
-                            'shap-val': shap_vals[0],
-                            'val-name': input_names})
-    # Create list of two different colors depending on shap-val
-    colors = [
-        '#0063D1' if value >= 0.0 else '#E43137' for value in shap_df['shap-val']
-    ]
-
-    condensed_names = ['Place', 'City', 'Sector', 'Police District Name',
-                       'Zip Code', 'Year', 'Month', 'Hour', "Minute"]
-
-    shap_plot = {
-        'data': [
-            {'x': shap_df['shap-val'], 'y': condensed_names,
-             'type': 'bar', 'orientation':'h', 'hovertext': shap_df['val-name'],
-             'marker': {'color': colors}, 'opacity': 0.8}],
-        'layout': {
-            'title': 'Atrribute Impact on Prediction',
-            'transition': {'duration': 250}}
-    }
-
-    return pred_out, shap_plot
+    return pred_out
 
 
-column2 = dbc.Col([
+column3 = dbc.Col([
 
 
 ])
 
 
-layout = dbc.Row([column1, column3])
+layout = dbc.Row([column1, column2])
