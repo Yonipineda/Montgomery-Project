@@ -2,6 +2,12 @@
 
 ---
 
+## Dash app
+
+In development. Going over unfinished work and will be deployed sometime soon.
+
+---
+
 ## Installation
 
 ##### clone the master branch to your local machine
@@ -31,10 +37,6 @@ NOTE: *OPTIONAL*
 ```
 
 ##### Now, follow along [Ryan Herr's](https://lambdaschool.github.io/ds/unit2/dash-template/) guide and build as you will.
-
-## Dash app
-
-In development. Going over unfinished work and will be deployed sometime soon.
 
 ---
 
