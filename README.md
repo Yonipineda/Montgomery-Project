@@ -2,6 +2,34 @@
 
 ---
 
+## Installation
+
+##### clone the master branch to your local machine
+```
+>> git clone https://github.com/Yonipineda/Montgomery-Project.git
+```
+
+##### Create virtual environment and install requirements.txt *OPTIONAL*
+```
+>> pipenv install requirements.txt
+```
+
+##### If you did the previous step and created an environment for this project, open the env
+```
+>> pipenv shell
+```
+
+---
+
+## Run the Dash app locally and start building!
+
+##### run it by executing the following line
+```
+>> python run.py
+```
+
+##### Now, follow along [Ryan Herr's](https://lambdaschool.github.io/ds/unit2/dash-template/) guide and build as you will.
+
 ## Dash app
 
 In development. Going over unfinished work and will be deployed sometime soon.
