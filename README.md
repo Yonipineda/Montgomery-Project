@@ -10,9 +10,11 @@ In development. Going over unfinished work and will be deployed sometime soon.
 
 ## Data
 
-The data source can be found at [dataMontgomery](https://data.montgomerycountymd.gov/Public-Safety/Crime/icn6-v9z3)
+- The data source can be found at [dataMontgomery](https://data.montgomerycountymd.gov/Public-Safety/Crime/icn6-v9z3)
 
-The cleaned data can be found in the notebooks folder, named [Cleaned_Crime.csv](notebooks/Cleaned_Crime.csv)
+- The cleaned data can be found in the notebooks folder, named [Cleaned_Crime.csv](notebooks/Cleaned_Crime.csv)
+
+- The smaller size cleaned data can be found in the notebooks folder, named [sml_crime.csv](sml_crime.csv)
 
 ---
 
@@ -35,6 +37,8 @@ This project was our Unit2 Final Project at [Lambda](https://lambdaschool.com/).
 ## Model
 
 - The joblib file can be found here [finalized_model.joblib](notebooks/finalized_model.joblib)
+
+- The explainer shap model can be found here [explainer.joblib](notebooks/explainer.joblib)
 
 ---
 
