@@ -10,9 +10,9 @@ In development. Going over unfinished work and will be deployed sometime soon.
 
 ## Installation
 
-##### clone the master branch to your local machine
+##### Fork the master branch, then clone the master branch to your local machine
 ```
->> git clone https://github.com/Yonipineda/Montgomery-Project.git
+>> git clone https://github.com/<repo>
 ```
 
 ##### Create virtual environment and install requirements.txt
