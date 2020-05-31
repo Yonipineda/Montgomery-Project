@@ -20,11 +20,14 @@ df = pd.read_csv('notebooks/Cleaned_Crime.csv')
 
 # Features/options
 available_place = sorted(df['Place'].unique())
-available_crime = sorted(df['Crime_Type'].unique())
+available_city = sorted(df['City'].unique())
+available_sector = sorted(df['Sector'].unique())
+available_police = sorted(df['Police District Name'].unique())
+available_zip = sorted(df['Zip Code'].unique())
+available_year = sorted(df['Year'].unique())
 available_month = sorted(df['Month'].unique())
 available_hour = sorted(df['Hour'].unique())
 available_min = sorted(df['Minute'].unique())
-available_victim = sorted(df['Victims'].unique())
 
 style = {'padding': '1.5em'}
 
@@ -50,47 +53,72 @@ column1 = dbc.Col([
         )
     ]),
     html.Div([
-        dcc.Markdown("###### Crime Type "),
+        dcc.Markdown("###### City"),
         dcc.Dropdown(
-            id='crime-dd',
+            id='city-dd',
             options=[
-                {'label': i, 'value': i} for i in available_crime],
-            value='Crime Against Society'
+                {'label': i, 'value': i} for i in available_city],
+            value='SILVER SPRING'
         )
     ]),
     html.Div([
-        dcc.Markdown("###### Victims"),
+        dcc.Markdown("###### Sector"),
         dcc.Dropdown(
-            id='victims-dd',
+            id='sector-dd',
             options=[
-                {'label': i, 'value': i} for i in available_victim],
-            value='2'
+                {'label': i, 'value': i} for i in available_sector],
+            value='L'
         )
     ]),
     html.Div([
-        dcc.Markdown("###### Month"),
+        dcc.Markdown("###### Police District"),
+        dcc.Dropdown(
+            id='police-dd',
+            options=[
+                {'label': i, 'value': i} for i in available_police],
+            value='WHEATON'
+        )
+    ]),
+    html.Div([
+        dcc.Markdown("###### Zip Code "),
+        dcc.Dropdown(
+            id='zip-dd',
+            options=[
+                {'label': i, 'value': i} for i in available_zip],
+            value='20902.0'
+        )
+    ]),
+    html.Div([
+        dcc.Markdown("###### Year"),
+        dcc.Dropdown(
+            id='year-dd',
+            options=[
+                {'label': i, 'value': i} for i in available_year],
+            value='2020'
+        )
+    ]),
+    html.Div([
+        dcc.Markdown("##### Month"),
         dcc.Dropdown(
             id='month-dd',
             options=[
                 {'label': i, 'value': i} for i in available_month],
-            value='1'
+            value='2'
         )
     ]),
     html.Div([
-        dcc.Markdown("###### Hour "),
+        dcc.Markdown("##### Hour"),
         dcc.Dropdown(
             id='hour-dd',
-            options=[
-                {'label': i, 'value': i} for i in available_hour],
+            options=[{'label': i, 'value': i} for i in available_hour],
             value='5'
         )
     ]),
     html.Div([
-        dcc.Markdown("###### Minute"),
+        dcc.Markdown("##### Minute"),
         dcc.Dropdown(
             id='minute-dd',
-            options=[
-                {'label': i, 'value': i} for i in available_min],
+            options=[{'label': i, 'value': i} for i in available_min],
             value='20'
         )
     ]),
@@ -101,7 +129,15 @@ column1 = dbc.Col([
 )
 
 column3 = dbc.Col([
-    dcc.Markdown("##### Set Approximate Year"),
+    dcc.Markdown("#####  Select A Year"),
+    dcc.Slider(
+        id='year-slide',
+        min=2019,
+        max=2020,
+        step=2,
+        value=2020,
+        marks={n: f'{n:.0f}' for n in range(2019, 2020, 2)}
+    ),
     html.H4(id='prediction-content', style={'fontWeight': 'bold'}),
     html.Div(
         dcc.Graph(id='shap-plot')
@@ -116,19 +152,23 @@ column3 = dbc.Col([
     [Output('prediction-content', 'children'),
      Output('shap-plot', 'figure')],
     [Input('place-dd', 'value'),
-     Input('crime-dd', 'value'),
-     Input('victims-dd', 'value'),
+     Input('city-dd', 'value'),
+     Input('sector-dd', 'value'),
+     Input('police-dd', 'value'),
+     Input('zip-dd', 'value'),
+     Input('year-dd', 'value'),
      Input('month-dd', 'value'),
      Input('hour-dd', 'value'),
      Input('minute-dd', 'value')])
 def predict_and_plot(
-        place, crime, victims, month, hour,
-        minute):
+        place, city, sector, policedistrictname, zipcode,
+        year, month, hour, minute):
     # Create prediction
     pred_df = pd.DataFrame(
-        columns=['Place', 'Crime_Type', 'Victims', 'Month', 'Hour',
-                 'Minute'],
-        data=[[place, crime, victims, month, hour, minute]]
+        columns=['Place', 'City', 'Sector', 'Police District Name', 'Zip Code',
+                 'Year', 'Month', 'Hour', 'Minute'],
+        data=[[place, city, sector, policedistrictname, zipcode,
+               year, month, hour, minute]]
     )
 
     pipe = load('notebooks/finalized_model.joblib')
@@ -154,14 +194,14 @@ def predict_and_plot(
         '#0063D1' if value >= 0.0 else '#E43137' for value in shap_df['shap-val']
     ]
 
-    condensed_names = ['Place', 'Crime', 'Victims', 'Month',
-                       'Hour', 'Minute']
+    condensed_names = ['Place', 'City', 'Sector', 'Police District Name',
+                       'Zip Code', 'Year', 'Month', 'Hour', "Minute"]
 
     shap_plot = {
         'data': [
-                {'x': shap_df['shap-val'], 'y': condensed_names,
-                 'type': 'bar', 'orientation':'h', 'hovertext': shap_df['val-name'],
-                 'marker': {'color': colors}, 'opacity': 0.8}],
+            {'x': shap_df['shap-val'], 'y': condensed_names,
+             'type': 'bar', 'orientation':'h', 'hovertext': shap_df['val-name'],
+             'marker': {'color': colors}, 'opacity': 0.8}],
         'layout': {
             'title': 'Atrribute Impact on Prediction',
             'transition': {'duration': 250}}
