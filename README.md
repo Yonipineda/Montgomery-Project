@@ -9,10 +9,12 @@
 >> git clone https://github.com/Yonipineda/Montgomery-Project.git
 ```
 
-##### Create virtual environment and install requirements.txt  NOTE: *OPTIONAL*
+##### Create virtual environment and install requirements.txt
 ```
 >> pipenv install requirements.txt
 ```
+NOTE: *OPTIONAL*
+
 
 ##### If you did the previous step and created an environment for this project, open the env
 ```
