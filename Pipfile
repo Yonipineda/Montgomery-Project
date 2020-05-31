@@ -13,6 +13,13 @@ gunicorn = "*"
 plotly = "*"
 pandas = "*"
 scikit-learn = "*"
+joblib = "*"
+sklearn = "*"
+category-encoders = "*"
+matplotlib = "*"
+eli5 = "*"
+pdpbox = "*"
+shap = "*"
 
 [requires]
 python_version = "3.7"
