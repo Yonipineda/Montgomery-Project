@@ -21,9 +21,9 @@ column1 = dbc.Col(
             is challenging in of itself. In some cases, it requires some domain knowledge
             of the data you are inspecting. Data is also very messy, chaos insues in data.
             There can be order, and a pattern can be found which can lead to insightful findings.
-            Lets take a look at how the data came in as I started:
+            Lets take a look at how the data came in as I started: \n
 
-            ![messy](/assets/messy.gif)
+            ![messy](/assets/messy.gif) \n
 
             The original file contained over 200k observations. There were a number of missing values,
             parsing the data was a challenge and, when it came to structuring it for training,
@@ -36,15 +36,15 @@ column1 = dbc.Col(
             byte encoding, removing unique observations in some columns, such as city/street name,
             that did not meet a certain threshold, filling in NaN's and dropping what remained, and
             removing columns that could cause leakage or over-fitting. This gif animation
-            shows a couple of functions that displays that work:
+            shows a couple of functions that displays that work: \n
 
             ![wrangling](/assets/wrangling.gif) \n
 
             #### Cleaned Data Ready For Action \n
 
-            Now, with the cleaned data:
+            Now, with the cleaned data: \n
 
-            ![cleaned](/assets/cleaned.gif)
+            ![cleaned](/assets/cleaned.gif) \n
 
             I went ahead and began some pre-processing for training. \n
 
@@ -53,22 +53,29 @@ column1 = dbc.Col(
             I did two splits, a 80/20 for the Train and Test split, and another
             80/20 for the Train and validation split. I ended with a shape of: \n
 
-            Split Shape: Train (24348, 27), Validate (6088, 27), Test (7610, 27) \n
+            *Split Shape: Train (24348, 27), Validate (6088, 27), Test (7610, 27)* \n
 
-            And, selected my target, that being 'Street Name' and the features to train.
+            And, selected my target, that being 'Street Name' and the features to train. \n
 
             ![cleaned](/assets/preprocess.gif) \n
 
 
-            #### Final Model 
+            #### Final Model \n
+
+            The data was trained on a RandomForestClassifier Model and some GridSearch
+            for hyper-parameter optimization. On the validation dataset, it received the
+            following score: \n
 
 
+            *Validation Accuracy: 0.8662943495400789* \n
 
+            On the Test dataset, it received: \n
 
+            *Test Score Using RandomForestClassifier W/ GridSearchCV: 0.8550591327201051* \n
 
+            Here is a gif animation for that process: \n
 
-
-
+            ![cleaned](/assets/model.gif)
 
 
             """
