@@ -36,6 +36,13 @@ NOTE: *OPTIONAL*
 >> python run.py
 ```
 
+---
+
+#### Additionally, run the app locally before pushing with gunicorn
+```
+>> gunicorn run:server 
+```
+
 ##### Now, follow along [Ryan Herr's](https://lambdaschool.github.io/ds/unit2/dash-template/) guide and build as you will.
 
 ---
