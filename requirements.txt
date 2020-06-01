@@ -3,12 +3,14 @@ dash-bootstrap-components
 dash-daq
 gunicorn
 plotly
-pandas
 scikit-learn
-joblib
-sklearn
 category-encoders
 matplotlib
 eli5
 pdpbox
 shap
+
+joblib==0.13.2
+sklearn==0.21.3
+pandas==0.25.1
+numpy==1.17.2

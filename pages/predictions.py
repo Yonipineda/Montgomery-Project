@@ -24,11 +24,11 @@ pipeline = load('notebooks/big_finalized_model.joblib')
 print(f"MODEL LOADED: {pipeline}")
 
 # Features/options
-available_place = sorted(df['Place'].unique())
-available_city = sorted(df['City'].unique())
+available_zip = sorted(df['Zip Code'].unique())
 available_sector = sorted(df['Sector'].unique())
 available_police = sorted(df['Police District Name'].unique())
-available_zip = sorted(df['Zip Code'].unique())
+available_city = sorted(df['City'].unique())
+available_place = sorted(df['Place'].unique())
 available_year = sorted(df['Year'].unique())
 available_month = sorted(df['Month'].unique())
 available_hour = sorted(df['Hour'].unique())
@@ -47,23 +47,13 @@ column1 = dbc.Col([
             Note: Month is set as a Numerical representation and Hour is in Military Time.
             """
     ),
-
     html.Div([
-        dcc.Markdown("##### Place"),
+        dcc.Markdown("##### Zip Code"),
         dcc.Dropdown(
-            id='place_dd',
+            id='zip_dd',
             options=[
-                {'label': i, 'value': i} for i in available_place],
-            value='Street - In vehicle'
-        )
-    ]),
-    html.Div([
-        dcc.Markdown("##### City"),
-        dcc.Dropdown(
-            id='city_dd',
-            options=[
-                {'label': i, 'value': i} for i in available_city],
-            value='SILVER SPRING'
+                {'label': i, 'value': i} for i in available_zip],
+            value='20902'
         )
     ]),
     html.Div([
@@ -78,19 +68,28 @@ column1 = dbc.Col([
     html.Div([
         dcc.Markdown("##### Police District"),
         dcc.Dropdown(
-            id='police_dd',
+            id='sector_dd',
             options=[
                 {'label': i, 'value': i} for i in available_police],
             value='WHEATON'
         )
     ]),
     html.Div([
-        dcc.Markdown("##### Zip Code "),
+        dcc.Markdown("##### City"),
         dcc.Dropdown(
-            id='zip_dd',
+            id='city_dd',
             options=[
-                {'label': i, 'value': i} for i in available_zip],
-            value='20902'
+                {'label': i, 'value': i} for i in available_city],
+            value='SILVER SPRING'
+        )
+    ]),
+    html.Div([
+        dcc.Markdown("##### Place"),
+        dcc.Dropdown(
+            id='place_dd',
+            options=[
+                {'label': i, 'value': i} for i in available_place],
+            value='Parking Lot - Commercial'
         )
     ]),
     html.Div([
@@ -134,11 +133,24 @@ column1 = dbc.Col([
 )
 
 column2 = dbc.Col([
-    dcc.Markdown('### Predicted Stree where crime will occur',
+    dcc.Markdown('### Predicted Street where crime will occur',
                  className='mb-4'),
-    dcc.Markdown('#### Based on Time, Place, and Location', className='mb-4'),
+    dcc.Markdown('#### Based on Time, Place, and Location',
+                 className='mb-4'),
     dcc.Markdown('#### Trained on ~40k observations', className='mb-4'),
-    html.Div(id='prediction-content', className='lead')
+    html.Div(id='prediction-content',
+             style={'textAlign': 'center', 'fontsize': 72
+
+                    }
+
+             ),
+    html.Div(
+        id='euphemism',
+        style={
+            'textAlign': 'center',
+            'fontSize': '30',
+        }
+    )
 
 ],
     md=6
@@ -147,11 +159,11 @@ column2 = dbc.Col([
 
 @app.callback(
     [Output('prediction-content', 'children')],
-    [Input('place_dd', 'value'),
-     Input('city_dd', 'value'),
+    [Input('zip_dd', 'value'),
      Input('sector_dd', 'value'),
      Input('police_dd', 'value'),
-     Input('zip_dd', 'value'),
+     Input('city_dd', 'value'),
+     Input('place_dd', 'value'),
      Input('year_dd', 'value'),
      Input('month_dd', 'value'),
      Input('hour_dd', 'value'),
@@ -160,9 +172,9 @@ def predict_and_plot(place_dd, city_dd, sector_dd, police_dd, zip_dd, year_dd,
                      month_dd, hour_dd, minute_dd):
 
     pred_df = pd.DataFrame(
-        columns=['place_dd', 'city_dd', 'sector_dd', 'police_dd',
-                 'zip_dd', 'year_dd', 'month_dd', 'hour_dd', 'minute_dd'],
-        data=[[place_dd, city_dd, sector_dd, police_dd, zip_dd,
+        columns=['Zip Code', 'Sector', 'Police District Name', 'City',
+                 'Place', 'Year', 'Month', 'Hour', 'Minute'],
+        data=[[zip_dd, sector_dd, police_dd, city_dd, place_dd,
                year_dd, month_dd, hour_dd, minute_dd]]
     )
 
@@ -170,7 +182,9 @@ def predict_and_plot(place_dd, city_dd, sector_dd, police_dd, zip_dd, year_dd,
 
     y_pred = pipeline.predict(pred_df)[0]
 
-    pred_out = f'Name of the Street: {y_pred}'
+    y_pred_pos = np.clip(y_pred, a_min=0, a_max=20)
+
+    pred_out = y_pred_pos
 
     return pred_out
 
