@@ -25,7 +25,9 @@ column1 = dbc.Col(
             time, risk increases: this was true in this case. It seems Time -- the hour
             of the day, month of the year, and even minute of the hour can predict if
             a crime will occur in a given street. Location was another one, it seems
-            certain Zip Code were I predictor. Now, I do want to stress that this in no
+            certain Zip Code were I predictor. \n
+
+            Now, I do want to stress that this in no
             way should be taken seriously, this is the work of a student with no more than
             a couple of months with programming experience and just enough understanding
             of statistics to be able to do just to data. Below is a picture illustrating
