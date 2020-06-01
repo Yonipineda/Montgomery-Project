@@ -7,7 +7,6 @@ from dash.dependencies import Input, Output
 import pandas as pd
 import numpy as np
 from joblib import load, dump
-import shap
 
 # Imports from this application
 from app import app
